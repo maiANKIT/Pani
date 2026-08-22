@@ -33,6 +33,7 @@ exports.register = async (req, res) => {
       email: user.email,
       roomNumber: user.roomNumber,
       isVerified: user.isVerified,
+      isAdmin: user.isAdmin,
       token: generateToken(user._id),
       message: "Registered. Waiting for verification.",
     });
@@ -58,6 +59,7 @@ exports.login = async (req, res) => {
       email: user.email,
       roomNumber: user.roomNumber,
       isVerified: user.isVerified,
+      isAdmin: user.isAdmin,
       token: generateToken(user._id),
     });
   } catch (error) {

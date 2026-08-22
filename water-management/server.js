@@ -15,7 +15,25 @@ startImageCleanupJob();
 // Security headers
 app.use(helmet());
 
-app.use(cors());
+// Only allow requests from our own frontend, not any website on the internet.
+// Set FRONTEND_URL in .env — comma-separate multiple origins if needed
+// (e.g. local dev + deployed URL).
+const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
+  .split(",")
+  .map((url) => url.trim());
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow tools like Postman/curl (no origin header) and whitelisted origins
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  })
+);
 app.use(express.json());
 
 // Strips any keys starting with "$" or containing "." from req.body/query/params

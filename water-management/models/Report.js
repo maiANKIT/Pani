@@ -10,9 +10,6 @@ const reportSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    // True once the auto-cleanup job has removed the image from
-    // Cloudinary (3 days after upload). The rest of the report record
-    // (who uploaded, who verified, description, status) is kept.
     imageDeleted: {
       type: Boolean,
       default: false,
@@ -27,8 +24,6 @@ const reportSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
-    // Denormalized from uploader — lets us quickly restrict verification
-    // to members of the same room without an extra lookup.
     roomNumber: {
       type: String,
       required: true,

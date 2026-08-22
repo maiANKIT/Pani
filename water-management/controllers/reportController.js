@@ -95,9 +95,7 @@ exports.verifyReport = async (req, res) => {
     const { action, reason } = req.body;
 
     if (!["verify", "reject"].includes(action)) {
-      return res
-        .status(400)
-        .json({ message: "action must be 'verify' or 'reject'" });
+      return res.status(400).json({ message: "action must be 'verify' or 'reject'" });
     }
 
     const report = await Report.findById(req.params.id);
@@ -111,10 +109,14 @@ exports.verifyReport = async (req, res) => {
         .json({ message: "You can only verify reports from your own room" });
     }
 
-    if (report.status !== "pending") {
+    if (report.uploadedBy.toString() === req.user._id.toString()) {
       return res
-        .status(400)
-        .json({ message: `Report already ${report.status}` });
+        .status(403)
+        .json({ message: "You cannot verify your own uploaded report" });
+    }
+
+    if (report.status !== "pending") {
+      return res.status(400).json({ message: `Report already ${report.status}` });
     }
 
     report.status = action === "verify" ? "verified" : "rejected";
@@ -142,9 +144,7 @@ exports.deleteReport = async (req, res) => {
 
     const isOwner = report.uploadedBy.toString() === req.user._id.toString();
     if (!isOwner && !req.user.isAdmin) {
-      return res
-        .status(403)
-        .json({ message: "Not authorized to delete this report" });
+      return res.status(403).json({ message: "Not authorized to delete this report" });
     }
 
     await cloudinary.uploader.destroy(report.cloudinaryId);
