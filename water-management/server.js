@@ -5,10 +5,12 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const connectDB = require("./config/db");
 const { authLimiter, generalLimiter } = require("./middleware/rateLimiter");
+const { startImageCleanupJob } = require("./jobs/imageCleanupJob");
 
 const app = express();
 
 connectDB();
+startImageCleanupJob();
 
 // Security headers
 app.use(helmet());

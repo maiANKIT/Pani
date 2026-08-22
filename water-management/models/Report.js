@@ -4,11 +4,18 @@ const reportSchema = new mongoose.Schema(
   {
     imageUrl: {
       type: String,
-      required: true,
+      default: "",
     },
     cloudinaryId: {
       type: String,
-      required: true,
+      default: "",
+    },
+    // True once the auto-cleanup job has removed the image from
+    // Cloudinary (3 days after upload). The rest of the report record
+    // (who uploaded, who verified, description, status) is kept.
+    imageDeleted: {
+      type: Boolean,
+      default: false,
     },
     description: {
       type: String,
