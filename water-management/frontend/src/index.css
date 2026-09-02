@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+}
+
+.font-display {
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.font-mono {
+  font-family: "IBM Plex Mono", monospace;
+}
+
+::selection {
+  background: #4f9377;
+  color: #faf9f5;
+}
+
+.card-stack > * {
+  transition: transform 0.35s ease;
+}
+.card-stack:hover > *:nth-child(1) {
+  transform: translate(-6px, -4px) rotate(-3deg);
+}
+.card-stack:hover > *:nth-child(2) {
+  transform: translate(4px, 2px) rotate(2deg);
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease both;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Staggered grid entrance — pair with an inline animation-delay per item */
+.stagger-in {
+  animation: fadeIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Camera shutter flash on capture */
+@keyframes flash {
+  0% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.flash-overlay {
+  animation: flash 380ms ease-out forwards;
+}
+
+/* Bouncy pop-in — captured photo preview, success checkmarks */
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.pop-in {
+  animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Card exit — used right before a verified/rejected/deleted item leaves the list */
+@keyframes cardOut {
+  to {
+    opacity: 0;
+    transform: scale(0.94) translateY(4px);
+  }
+}
+.card-out {
+  animation: cardOut 0.32s ease forwards;
+}
+
+/* Toast entrance — bouncy drop-in, keeps the element horizontally centered
+   throughout since it replaces the -translate-x-1/2 utility during the run */
+@keyframes toastIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -14px) scale(0.92);
+  }
+  60% {
+    opacity: 1;
+    transform: translate(-50%, 3px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+.toast-in {
+  animation: toastIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}

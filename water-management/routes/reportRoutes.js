@@ -4,6 +4,7 @@ const {
   createReport,
   getRoomReports,
   getPendingReports,
+  getRejectedReports, 
   verifyReport,
   deleteReport,
 } = require("../controllers/reportController");
@@ -16,7 +17,7 @@ router.use(protect, requireVerified);
 router.post("/", upload.single("photo"), createReport);
 router.get("/", getRoomReports);
 router.get("/pending", getPendingReports);
-router.patch("/:id/verify", verifyReport);
+router.patch("/:id/verify", verifyReport);  
 router.delete("/:id", deleteReport);
-
+router.get("/rejected", getRejectedReports); 
 module.exports = router;

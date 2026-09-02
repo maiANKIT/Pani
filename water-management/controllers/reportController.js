@@ -90,6 +90,36 @@ exports.getPendingReports = async (req, res) => {
 //          SAME room as the report can act on it
 // @route   PATCH /api/reports/:id/verify
 // body: { action: "verify" | "reject", reason?: string }
+// @desc    Rejected reports from MY room
+// @route   GET /api/reports/rejected?page=1&limit=10
+exports.getRejectedReports = async (req, res) => {
+  try {
+    const page = Math.max(parseInt(req.query.page) || 1, 1);
+    const limit = Math.min(parseInt(req.query.limit) || 10, 50);
+    const skip = (page - 1) * limit;
+
+    const filter = { roomNumber: req.user.roomNumber, status: "rejected" };
+
+    const [reports, total] = await Promise.all([
+      Report.find(filter)
+        .populate("uploadedBy", "name")
+        .populate("verifiedBy", "name")
+        .sort("-createdAt")
+        .skip(skip)
+        .limit(limit),
+      Report.countDocuments(filter),
+    ]);
+
+    res.json({
+      reports,
+      page,
+      totalPages: Math.ceil(total / limit) || 1,
+      totalReports: total,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 exports.verifyReport = async (req, res) => {
   try {
     const { action, reason } = req.body;
